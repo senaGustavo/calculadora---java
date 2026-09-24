@@ -1,6 +1,14 @@
 package View;
 
+import Business.Adicao;
+import Business.Subtracao;
+import Business.Multiplicacao;
+import Business.Divisao;
+import Business.Calculo;
+
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,6 +25,17 @@ public class Formulario {
     public Formulario() {
 
         inicializarComponentes();
+    }
+    private void calcular(Calculo calculo) {
+        calculo.calcular();                     // chama o método da interface
+        lblResultado.setText("Resultado: " + calculo.getResultado());
+    }
+    private float pegarValor1() {
+        return Float.parseFloat(txtValor1.getText());
+    }
+
+    private float pegarValor2() {
+        return Float.parseFloat(txtValor2.getText());
     }
 
     private void inicializarComponentes() {
@@ -65,6 +84,40 @@ public class Formulario {
         btnDividir = new JButton("÷");
         btnDividir.setBounds(290, 180, 70, 30);
         form.add(btnDividir);
+
+        btnSomar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calcular(new Adicao(pegarValor1(), pegarValor2()));
+            }
+        });
+
+        btnSubtrair.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calcular(new Subtracao(pegarValor1(), pegarValor2()));
+            }
+        });
+
+        btnMultiplicar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calcular(new Multiplicacao(pegarValor1(), pegarValor2()));
+            }
+        });
+
+        btnDividir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                float v2 = pegarValor2();
+                if (v2 == 0) {
+                    lblResultado.setText("Resultado: Erro - divisão por zero!");
+                    return;
+                }
+                calcular(new Divisao(pegarValor1(), v2));
+            }
+        });
+
 
         form.setVisible(true);
     }
